@@ -78,6 +78,9 @@ dev-status:
 	kubectl get pods -o wide --watch --all-namespaces
 
 
+dev-restart:
+	kubectl rollout restart deployment $(APP) --namespace=$(NAMESPACE)
+
 dev-logs:
 # Display logs of all containers related to the 'APP' application
 # in the 'NAMESPACE' namespace, tracking in real time and showing the last 100 lines.
