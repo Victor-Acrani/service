@@ -21,7 +21,7 @@ TELEPRESENCE    := datawire/tel2:2.13.1
 
 KIND_CLUSTER    := ardan-starter-cluster
 NAMESPACE       := sales-system
-APP             := sales
+APP             := sales # app label for k8s config files
 BASE_IMAGE_NAME := ardanlabs/service
 SERVICE_NAME    := sales-api
 VERSION         := 0.0.1
@@ -76,6 +76,12 @@ dev-status:
 	kubectl get nodes -o wide
 	kubectl get svc -o wide
 	kubectl get pods -o wide --watch --all-namespaces
+
+
+dev-logs:
+# Display logs of all containers related to the 'APP' application
+# in the 'NAMESPACE' namespace, tracking in real time and showing the last 100 lines.
+	kubectl logs --namespace=$(NAMESPACE) -l app=$(APP) --all-containers=true -f --tail=100	
 
 # ==============================================================================
 
