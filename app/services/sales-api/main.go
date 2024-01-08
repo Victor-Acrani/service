@@ -32,7 +32,7 @@ func run(log *zap.SugaredLogger) error {
 	// -------------------------------------------------------------------------
 	// GOMAXPROCS
 
-	log.Infow("startup", "GOMAXPROCS", runtime.GOMAXPROCS(0), "BUILD", build)
+	log.Infow("startup", "GOMAXPROCS", runtime.GOMAXPROCS(0), "BUILD-", build)
 
 	shutdown := make(chan os.Signal, 1)
 	// SIGINT (CTRL C) SIGTERM (KUBERNETES SIGNAL)
