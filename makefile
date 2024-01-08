@@ -62,6 +62,7 @@ dev-down:
 	kind delete cluster --name $(KIND_CLUSTER)
 
 dev-load:
+# Load the Docker image '$(SERVICE_IMAGE)' into the Kubernetes cluster 'KIND_CLUSTER' using 'kind'.
 	kind load docker-image $(SERVICE_IMAGE) --name $(KIND_CLUSTER)
 
 dev-apply:
@@ -80,6 +81,10 @@ dev-status:
 
 dev-restart:
 	kubectl rollout restart deployment $(APP) --namespace=$(NAMESPACE)
+
+dev-update: all dev-load dev-restart
+
+dev-update-apply: all dev-load dev-apply	
 
 dev-logs:
 # Display logs of all containers related to the 'APP' application
