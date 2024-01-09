@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ardanlabs/conf/v3"
 	"github.com/Victor-Acrani/service/foundation/logger"
+	"github.com/ardanlabs/conf/v3"
 	"go.uber.org/zap"
 )
 
@@ -66,6 +66,18 @@ func run(log *zap.SugaredLogger) error {
 		}
 		return fmt.Errorf("parsing config: %w", err)
 	}
+
+	// -------------------------------------------------------------------------
+	// App Starting
+
+	log.Infow("starting service", "version", build)
+	defer log.Infow("shutdown complete")
+
+	out, err := conf.String(&cfg)
+	if err != nil {
+		return fmt.Errorf("generating config for output: %w", err)
+	}
+	log.Infow("startup", "config", out)
 
 	shutdown := make(chan os.Signal, 1)
 	// SIGINT (CTRL C) SIGTERM (KUBERNETES SIGNAL)
