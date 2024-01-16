@@ -4,6 +4,7 @@ resources: # Lists the features to be modified or applied
 - ../../base/sales/
 patches: # Defines the patches to be applied to the previously listed features
 - path: ./dev-sales-patch-deploy.yaml
+- path: ./dev-sales-patch-service.yaml
 images: # remaps the image with the name service-image to ardanlabs/service/sales-api with the tag 0.0.1
 - name: service-image
   newName: ardanlabs/service/sales-api
