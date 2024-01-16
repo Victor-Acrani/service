@@ -70,9 +70,6 @@ dev-down:
 	telepresence quit -s
 	kind delete cluster --name $(KIND_CLUSTER)
 
-dev-down-local:
-	kind delete cluster --name $(KIND_CLUSTER)	
-
 dev-load:
 # Load the Docker image '$(SERVICE_IMAGE)' into the Kubernetes cluster 'KIND_CLUSTER' using 'kind'.
 	kind load docker-image $(SERVICE_IMAGE) --name $(KIND_CLUSTER)
@@ -123,3 +120,6 @@ tidy:
 
 metrics-view-local:
 	expvarmon -ports="localhost:4000" -vars="build,requests,goroutines,errors,panics,mem:memstats.Alloc"	
+
+test-endpoint:
+	curl -il sales-api.sales-system.svc.cluster.local:4000/debug/pprof	
