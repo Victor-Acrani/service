@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Victor-Acrani/service/app/services/sales-api/handlers"
 	"github.com/Victor-Acrani/service/business/web/v1/debug"
 	"github.com/Victor-Acrani/service/foundation/logger"
 	"github.com/ardanlabs/conf/v3"
@@ -107,9 +108,14 @@ func run(log *zap.SugaredLogger) error {
 	// SIGINT (CTRL C) SIGTERM (KUBERNETES SIGNAL)
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
 
+	apiMux := handlers.APIMux(handlers.APIMuxConfig{
+		Shutdown: shutdown,
+		Log:      log,
+	})
+
 	api := http.Server{
 		Addr:         cfg.Web.APIHost,
-		Handler:      nil,
+		Handler:      apiMux,
 		ReadTimeout:  cfg.Web.ReadTimeout,
 		WriteTimeout: cfg.Web.WriteTimeout,
 		IdleTimeout:  cfg.Web.IdleTimeout,
