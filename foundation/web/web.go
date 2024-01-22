@@ -20,7 +20,9 @@ type Handler func(ctx context.Context, w http.ResponseWriter, r *http.Request) e
 type App struct {
 	*httptreemux.ContextMux
 	shutdown chan os.Signal
+	mw       []Middleware
 }
+
 // MY NOTE: Its important to notice that the App struct embed *httptreemux.ContextMux so it can have all of its attributes.
 
 // NewApp creates an App value that handle a set of routes for the application.
@@ -33,7 +35,9 @@ func NewApp(shutdown chan os.Signal) *App {
 
 // Handle sets a handler function for a given HTTP method and path pair
 // to the application server mux.
-func (a *App) Handle(method string, path string, handler Handler) {
+func (a *App) Handle(method string, path string, handler Handler, mw ...Middleware) {
+	handler = wrapMiddleware(mw, handler)
+	handler = wrapMiddleware(a.mw, handler)
 
 	h := func(w http.ResponseWriter, r *http.Request) {
 
@@ -49,7 +53,6 @@ func (a *App) Handle(method string, path string, handler Handler) {
 
 	a.ContextMux.Handle(method, path, h)
 }
-
 
 // MY NOTE: The handler type defined in this package overwrites the http.HandlerFunc in order to accept the usage of a context.Context.
 // This is possible because we can leverage clousures in golang. The Handle function creates a annonymous http.HandlerFunc for adding
